@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dental_supplies/Pages/Auth/Login.dart';
 import 'package:dental_supplies/Utils/Api.dart';
 import 'package:dental_supplies/Utils/ColorsApp.dart';
@@ -6,10 +8,12 @@ import 'package:dental_supplies/Utils/Validation/Validation.dart';
 import 'package:dental_supplies/Utils/shared_preferences.dart';
 import 'package:dental_supplies/Widget/AccounsWidget/ButtonAccount.dart';
 import 'package:dental_supplies/Widget/AccounsWidget/ButtonsUpdateAccounts.dart';
+import 'package:dental_supplies/Widget/AccounsWidget/DialogPhoto.dart';
 import 'package:dental_supplies/Widget/AccounsWidget/TextFieldAccount.dart';
 import 'package:dental_supplies/Widget/Loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyAccount extends StatefulWidget {
   const MyAccount({super.key});
@@ -19,16 +23,21 @@ class MyAccount extends StatefulWidget {
 }
 
 class _MyAccountState extends State<MyAccount> {
+  final ImagePicker picker = ImagePicker();
+  XFile? image;
+
   TextEditingController name = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController oldPassword = TextEditingController();
   TextEditingController newPassword = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+
   bool updateInfo = false;
   bool updatePassword = false;
-
   bool loading = true;
+
   Map data = {};
+
   String id = "";
   String errorName = "";
   String errorPhone = "";
@@ -38,16 +47,22 @@ class _MyAccountState extends State<MyAccount> {
 
   Future<void> getDataForApi() async {
     loading = true;
+    image = null;
     setState(() {});
     data.clear();
+
+    // Get ID from Cache
     id = await Cache.GetString("id");
+
+    // Fetch Data fro APi
     var response = await Api.get("${LinksApp.getDataProfileByID}/$id");
+
     if (response["status"] == "200") {
       data = response["data"];
-      print(data);
       name.text = "${data["name"]}";
       phone.text = "${data["phone"]}";
     }
+
     loading = false;
     setState(() {});
   }
@@ -112,6 +127,23 @@ class _MyAccountState extends State<MyAccount> {
     setState(() {});
   }
 
+  Future<void> _updateImageProfile() async {
+    if (image != null) {
+      // convert from XFile to File
+
+      File file = File(image!.path);
+      loading = true;
+      setState(() {});
+      await Api.postFiles(
+          "${LinksApp.upDataImageProfileByID}/$id", {"image": file}, {});
+      await getDataForApi();
+      Get.snackbar("تنبيه", "تمت عمليه التعديل بنجاح");
+    } else {
+      Get.snackbar("تنبيه", "يرجى اختيار صورة أولاً",
+          backgroundColor: Colors.redAccent);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -122,29 +154,94 @@ class _MyAccountState extends State<MyAccount> {
   @override
   Widget build(BuildContext context) {
     return loading
-        ? Loading()
+        ? const Loading()
         : SizedBox(
             width: double.infinity,
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  ClipOval(
-                      child: Image.network(
-                    "${data["image"]}",
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  )),
+                  Stack(
+                    children: [
+                      ClipOval(
+                          child: image != null
+                              ? Image.file(
+                                  File(image!.path),
+                                  width: 200,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  "${data["image"]}",
+                                  width: 200,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                )),
+                      Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: InkWell(
+                            onTap: () {
+                              DialogPhoto(
+                                () async {
+                                  image = await picker.pickImage(
+                                      source: ImageSource.camera);
+                                  Get.back();
+                                  setState(() {});
+                                },
+                                () async {
+                                  image = await picker.pickImage(
+                                      source: ImageSource.gallery);
+                                  Get.back();
+                                  setState(() {});
+                                },
+                              );
+                            },
+                            child: const CircleAvatar(
+                                radius: 25,
+                                backgroundColor: ColorsApp.primary,
+                                child: Icon(
+                                  Icons.edit,
+                                  color: ColorsApp.white,
+                                  size: 35,
+                                )),
+                          ))
+                    ],
+                  ),
+                  if (image != null)
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      width: MediaQuery.of(context).size.width / 1.5,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            "هل تريد حفظ التعديــلات",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 23),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          ButtonsUpdateAccounts(
+                            Ok: _updateImageProfile,
+                            Cansel: () {
+                              image = null;
+                              setState(() {});
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   const SizedBox(
                     height: 15,
                   ),
                   Text(
                     "${data["name"]}",
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                   ),
                   Text(
                     "${data["email"]}",
-                    style: TextStyle(color: ColorsApp.gray),
+                    style: const TextStyle(color: ColorsApp.gray),
                   ),
                   ButtonAccount(
                     title: "المعلومات الشخصية",

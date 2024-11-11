@@ -75,9 +75,9 @@ class _ProudectState extends State<Proudect> {
               },
             )
           : isLoading
-              ? const Loading()
+              ?  Loading()
               : data.isEmpty
-                  ? EmpityData()
+                  ? EmpityData(txt: "لايوجد بيانات حاليا!",)
                   : Column(
                       children: [
                         const ButtonSearch(),

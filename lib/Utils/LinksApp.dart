@@ -10,5 +10,6 @@ class LinksApp {
   static const  getDataProfileByID = "$server/Data-profile";
   static const  upDataDataProfileByID = "$server/Data-profile";
   static const  upDataPasswordProfileByID = "$server/Data-profile-password";
+  static const  upDataImageProfileByID = "$server/Data-profile-Image";
   static const  searchByText = "$server/Search";
 }

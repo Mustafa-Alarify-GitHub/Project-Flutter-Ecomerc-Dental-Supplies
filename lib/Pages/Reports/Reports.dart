@@ -12,7 +12,7 @@ class Reports extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Container(
           width: double.infinity,
-          child:loading?const Loading():data.isEmpty?const EmpityData(): ListView.builder(
+          child:loading?const Loading():data.isEmpty?const EmpityData(txt: "لايوجد بيانات حاليا!",): ListView.builder(
               itemCount: data.length,
               itemBuilder: (context, index) {return Container();})
     );

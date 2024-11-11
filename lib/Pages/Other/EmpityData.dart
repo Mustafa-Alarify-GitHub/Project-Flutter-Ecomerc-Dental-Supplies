@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class EmpityData extends StatelessWidget {
-  final String? txt;
+  final String txt;
 
-  const EmpityData({super.key, this.txt});
+  const EmpityData({super.key, required this.txt});
+
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class EmpityData extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          txt == "" ? "لايوجد بيانات حاليا!" : txt!,
+          txt,
           style: const TextStyle(fontSize: 22, color: ColorsApp.grayWithOpcity),
         ),
         const SizedBox(

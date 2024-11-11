@@ -40,7 +40,7 @@ class _AllProudectState extends State<AllProudect> {
       child: isLoading
           ? const Loading()
           : data.isEmpty
-              ? const EmpityData()
+              ? const EmpityData(txt: "لايوجد بيانات حاليا!",)
               : Column(
                   children: [
                     Expanded(

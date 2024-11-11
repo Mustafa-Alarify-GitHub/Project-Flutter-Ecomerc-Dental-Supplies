@@ -60,7 +60,6 @@ class _HomeState extends State<Home> {
     super.initState();
 
     GetData();
-
   }
 
   @override
@@ -72,80 +71,85 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return loading
-        ? const Loading()
-        : ClipRect(
-            child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Heros.isNotEmpty
-                    ? SizedBox(
-                        height: 200,
-                        child: PageView.builder(
-                          controller: _controller,
-                          itemCount: Heros.length,
-                          onPageChanged: (index) {
-                            _currentPage = index;
-                          },
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40),
-                              ),
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              child: Image.network(
-                                Heros[index]["image"]!,
-                                fit: BoxFit.cover,
-                              ),
-                            );
-                          },
+    return RefreshIndicator(
+      onRefresh: () async {
+        await GetData();
+      },
+      child: loading
+          ? const Loading()
+          : ClipRect(
+              child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Heros.isNotEmpty
+                      ? SizedBox(
+                          height: 200,
+                          child: PageView.builder(
+                            controller: _controller,
+                            itemCount: Heros.length,
+                            onPageChanged: (index) {
+                              _currentPage = index;
+                            },
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                child: Image.network(
+                                  Heros[index]["image"]!,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : Container(),
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "المزودين",
+                          style: TextStyle(color: ColorsApp.gray),
                         ),
-                      )
-                    : Container(),
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "المزودين",
-                        style: TextStyle(color: ColorsApp.gray),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Get.to(() => AllClinics());
-                        },
-                        child: const Text(
-                          "مشاهدة الكل >",
-                          style: TextStyle(color: ColorsApp.primary),
+                        InkWell(
+                          onTap: () {
+                            Get.to(() => AllClinics());
+                          },
+                          child: const Text(
+                            "مشاهدة الكل >",
+                            style: TextStyle(color: ColorsApp.primary),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                data.isEmpty
-                    ? EmpityData()
-                    : GridView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        itemCount: data.length,
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10),
-                        itemBuilder: (context, index) => Cardclinic(
-                          clinic: "${data[index]["name_company"]}",
-                          imgSrc: "${data[index]["image"]}",
-                          nameUser: "${data[index]["name"]}",
-                          id: data[index]["id"],
-                        ),
-                      )
-              ],
-            ),
-          ));
+                  data.isEmpty
+                      ? EmpityData(txt: "لايوجد بيانات حاليا!",)
+                      : GridView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          itemCount: data.length,
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10),
+                          itemBuilder: (context, index) => Cardclinic(
+                            clinic: "${data[index]["name_company"]}",
+                            imgSrc: "${data[index]["image"]}",
+                            nameUser: "${data[index]["name"]}",
+                            id: data[index]["id"],
+                          ),
+                        )
+                ],
+              ),
+            )),
+    );
   }
 }
