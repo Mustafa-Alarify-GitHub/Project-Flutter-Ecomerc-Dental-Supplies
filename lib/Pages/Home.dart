@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dental_supplies/Pages/Other/EmpityData.dart';
 import 'package:dental_supplies/Utils/Api.dart';
 import 'package:dental_supplies/Utils/ColorsApp.dart';
 import 'package:dental_supplies/Pages/Clinic/AllClinics.dart';
@@ -32,7 +33,7 @@ class _HomeState extends State<Home> {
       }
       _controller.animateToPage(
         _currentPage,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     });
@@ -43,22 +44,23 @@ class _HomeState extends State<Home> {
     Heros.clear();
     data.clear();
 
-    var response = await Api.get(LinksApp.DataHomeUrl);
+    var response = await Api.get(LinksApp.dataHomeUrl);
 
-    print(response);
     if (response["status"] == "200") {
       Heros.addAll(response["heroes"]);
       data.addAll(response["data"]);
     }
     loading = false;
+    Heros.isNotEmpty ? _startAutoSlide() : null;
     setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    _startAutoSlide();
+
     GetData();
+
   }
 
   @override
@@ -124,22 +126,24 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                GridView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  itemCount: data.length,
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10),
-                  itemBuilder: (context, index) => Cardclinic(
-                    clinic: "${data[index]["name_company"]}",
-                    imgSrc: "${data[index]["image"]}",
-                    nameUser: "${data[index]["name"]}",
-                    id: data[index]["id"],
-                  ),
-
-                )
+                data.isEmpty
+                    ? EmpityData()
+                    : GridView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        itemCount: data.length,
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10),
+                        itemBuilder: (context, index) => Cardclinic(
+                          clinic: "${data[index]["name_company"]}",
+                          imgSrc: "${data[index]["image"]}",
+                          nameUser: "${data[index]["name"]}",
+                          id: data[index]["id"],
+                        ),
+                      )
               ],
             ),
           ));

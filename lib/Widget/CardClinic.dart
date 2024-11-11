@@ -40,13 +40,21 @@ class Cardclinic extends StatelessWidget {
               ),
             ),
             Expanded(child: Column(mainAxisSize: MainAxisSize.min,children: [
-              Text(
-                  clinic,
-                  style: const TextStyle(fontSize: 20, color: ColorsApp.primary),
-                ),
-                Text(
-                  nameUser,
-                  style: const TextStyle(fontSize: 11, color: ColorsApp.gray),
+              Expanded(
+                child: Text(
+                    clinic,
+                    maxLines: 1,
+                    overflow:TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 20, color: ColorsApp.primary),
+                  ),
+              ),
+                Expanded(
+                  child: Text(
+                    nameUser,
+                    maxLines: 1,
+                    overflow:TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 11, color: ColorsApp.gray),
+                  ),
                 ),
               ],))
 

@@ -1,6 +1,5 @@
 import 'package:dental_supplies/Utils/Api.dart';
 import 'package:dental_supplies/Utils/ColorsApp.dart';
-import 'package:dental_supplies/Utils/ImagesApp.dart';
 import 'package:dental_supplies/Pages/Auth/Login.dart';
 import 'package:dental_supplies/Pages/Layout.dart';
 import 'package:dental_supplies/Utils/LinksApp.dart';
@@ -56,15 +55,15 @@ class _RegisterState extends State<Register> {
     if (emailError.isEmpty && passwordError.isEmpty) {
       sending = true;
       setState(() {});
-      var response = await Api.post(LinksApp.RegisterUrl, {
+      var response = await Api.post(LinksApp.registerUrl, {
         "email": "${email.text.trim()}",
         "password": "${password.text}",
-        "name_company": "${nameClinic.text}",
+        "clinic": "${nameClinic.text}",
         "name": "${nameUser.text}",
         "phone": "${phone.text}",
         "Location": "${address.text}",
       });
-
+      print(response);
       if (response["status"] == "200") {
         Cache.SetString("id", "${response["data"]["id"]}");
         Get.off(() => Layout());

@@ -42,15 +42,21 @@ class CardProdect extends StatelessWidget {
                     child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                          fontSize: 20, color: ColorsApp.primary),
+                    Expanded(
+                      child: Text(
+                        name, maxLines: 1,
+                        overflow:TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 20, color: ColorsApp.primary),
+                      ),
                     ),
-                    Text(
-                      price,
-                      style:
-                          const TextStyle(fontSize: 11, color: ColorsApp.gray),
+                    Expanded(
+                      child: Text(
+                        price, maxLines: 1,
+                        overflow:TextOverflow.ellipsis,
+                        style:
+                            const TextStyle(fontSize: 20, color: ColorsApp.gray),
+                      ),
                     ),
                   ],
                 ))

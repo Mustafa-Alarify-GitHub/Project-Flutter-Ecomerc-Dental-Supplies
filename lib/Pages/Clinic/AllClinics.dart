@@ -1,5 +1,7 @@
+import 'package:dental_supplies/Utils/Api.dart';
 import 'package:dental_supplies/Utils/ColorsApp.dart';
 import 'package:dental_supplies/Pages/Other/NoConnect.dart';
+import 'package:dental_supplies/Utils/LinksApp.dart';
 import 'package:dental_supplies/Widget/ButtonSearch.dart';
 import 'package:dental_supplies/Widget/CardClinic.dart';
 import 'package:dental_supplies/Widget/Loading.dart';
@@ -14,8 +16,8 @@ class AllClinics extends StatefulWidget {
 
 class _AllClinicsState extends State<AllClinics> {
   bool isConnectNet = true;
-  bool isLoading = false;
-  List<Map<String, String>> data = [
+  bool isLoading = true;
+  List data = [
     {
       "image":
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeRNT2W7qFwPT6E-d964PtiHIWczi7Wtkh2Q&s",
@@ -71,9 +73,24 @@ class _AllClinicsState extends State<AllClinics> {
     setState(() {});
   }
 
+  Future<void> GetAllDataForApi() async {
+    await _checkInternet();
+    isLoading = true;
+    data.clear();
+
+    var response = await Api.get(LinksApp.getAllClinic);
+    if (response["status"] == "200") {
+      data.addAll(response["data"]);
+    }
+    print(response);
+    isLoading = false;
+    setState(() {});
+  }
+
   @override
   void initState() {
-    _checkInternet();
+    super.initState();
+    GetAllDataForApi();
   }
 
   @override
@@ -84,38 +101,43 @@ class _AllClinicsState extends State<AllClinics> {
         backgroundColor: Colors.white,
         title: const Text("المزودين"),
       ),
-      body: !isConnectNet
-          ? NoConnect(
-              onTap: () {
-                _checkInternet();
-              },
-            )
-          : isLoading
-              ? Loading()
-              : Column(
-                  children: [
-                    ButtonSearch(),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        child: GridView.builder(
-                            itemCount: data.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10),
-                            itemBuilder: (context, index) {
-                              return Cardclinic(
-                                  id: 1,
-                                  imgSrc: "${data[index]["image"]}",
-                                  clinic: "${data[index]["name_clinic"]}",
-                                  nameUser: "${data[index]["name_user"]}");
-                            }),
-                      ),
-                    )
-                  ],
-                ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await GetAllDataForApi();
+        },
+        child: !isConnectNet
+            ? NoConnect(
+                onTap: () {
+                  _checkInternet();
+                },
+              )
+            : isLoading
+                ? Loading()
+                : Column(
+                    children: [
+                      ButtonSearch(),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          child: GridView.builder(
+                              itemCount: data.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10),
+                              itemBuilder: (context, index) {
+                                return Cardclinic(
+                                    id: 1,
+                                    imgSrc: "${data[index]["image"]}",
+                                    clinic: "${data[index]["name_company"]}",
+                                    nameUser: "${data[index]["name"]}");
+                              }),
+                        ),
+                      )
+                    ],
+                  ),
+      ),
     );
   }
 }

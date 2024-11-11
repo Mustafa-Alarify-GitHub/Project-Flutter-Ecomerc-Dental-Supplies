@@ -42,11 +42,13 @@ class _LoginState extends State<Login> {
 
     if (txtErrorEmail.isEmpty && txtErrorPassword.isEmpty) {
       sending = true;
+
       setState(() {});
-      var response = await Api.post(LinksApp.LoginUrl, {
-        "email": email.text.trim(),
-        "password": password.text,
+      var response = await Api.post(LinksApp.loginUrl, {
+        "email": "${email.text.trim()}",
+        "password": "${password.text}",
       });
+      print(response);
       if (response["status"] == "200") {
         Cache.SetString("id", "${response["data"]["id"]}");
         Get.off(() => Layout());
@@ -104,7 +106,9 @@ class _LoginState extends State<Login> {
                     width:
                         sending ? 100 : MediaQuery.of(context).size.width / 2,
                     contentBtn: sending
-                        ? const CircularProgressIndicator(color: ColorsApp.white,)
+                        ? const CircularProgressIndicator(
+                            color: ColorsApp.white,
+                          )
                         : const Text(
                             "تسجيل دخول",
                             style:

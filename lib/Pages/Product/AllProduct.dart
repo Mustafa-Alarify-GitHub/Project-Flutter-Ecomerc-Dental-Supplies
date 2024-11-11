@@ -1,9 +1,8 @@
-import 'package:dental_supplies/Utils/Check%20internet.dart';
+import 'package:dental_supplies/Pages/Other/EmpityData.dart';
+import 'package:dental_supplies/Utils/Api.dart';
 import 'package:dental_supplies/Utils/ColorsApp.dart';
-import 'package:dental_supplies/Pages/Other/NoConnect.dart';
 import 'package:dental_supplies/Pages/Product/ProdectDetails.dart';
-import 'package:dental_supplies/Widget/ButtonShowCart.dart';
-import 'package:dental_supplies/Widget/ButtonSearch.dart';
+import 'package:dental_supplies/Utils/LinksApp.dart';
 import 'package:dental_supplies/Widget/CardProdect.dart';
 import 'package:dental_supplies/Widget/Loading.dart';
 import 'package:flutter/material.dart';
@@ -15,38 +14,24 @@ class AllProudect extends StatefulWidget {
 }
 
 class _AllProudectState extends State<AllProudect> {
-  bool isLoading = false;
-  List<Map<String, String>> data = [
-    {
-      "image":
-          "https://media.zid.store/thumbs/edb8bc86-dd7d-4894-9c3d-86cee4057b51/2f6edcdf-a91b-4a19-9864-cfe77c71d366-thumbnail-1000x1000-70.jpeg",
-      "price": "500",
-      "name": "ملقاط",
-    },
-    {
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGjNQDhVDfzvr89ryGXZ1JDIhflcN4i1WaRA&s",
-      "price": "500",
-      "name": "ملقاط",
-    },
-    {
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqsriKFcPghAAr1Z_0exUiuai1DZTys-S6Ug&s",
-      "price": "500",
-      "name": "ملقاط",
-    },
-    {
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRute7O50ACWBg0rc9vvls06ThhamG1bxMINw&s",
-      "price": "500",
-      "name": "ملقاط",
-    },
-  ];
+  bool isLoading = true;
+  List data = [];
+
+  Future<void> GetAllDataForApi() async {
+    isLoading = true;
+    data.clear();
+
+    var response = await Api.get(LinksApp.getProductAllUrl);
+    if (response["status"] == "200") {
+      data.addAll(response['data']);
+    }
+    isLoading = false;
+    setState(() {});
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
-  }
+    super.initState();GetAllDataForApi();}
 
   @override
   Widget build(BuildContext context) {
@@ -54,34 +39,39 @@ class _AllProudectState extends State<AllProudect> {
       color: ColorsApp.white,
       child: isLoading
           ? const Loading()
-          : Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(15),
-                    child: GridView.builder(
-                        itemCount: data.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10,
-                                childAspectRatio: .7,
-                                mainAxisSpacing: 10),
-                        itemBuilder: (context, index) {
-                          return CardProdect(
-                              onTap: () {
-                                Get.to(() => ProdectDetails(
-                                      id: 1,
-                                    ));
-                              },
-                              Img: "${data[index]["image"]}",
-                              name: "${data[index]["name"]}",
-                              price: "${data[index]["price"]}");
-                        }),
-                  ),
-                )
-              ],
-            ),
+          : data.isEmpty
+              ? const EmpityData()
+              : Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        child: GridView.builder(
+                            itemCount: data.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 10,
+                                    childAspectRatio: .7,
+                                    mainAxisSpacing: 10),
+                            itemBuilder: (context, index) {
+                              return CardProdect(
+                                  onTap: () {
+                                    print("idUser: ${data[index]["Manger_Id"]}");
+                                    print("idProduct: ${data[index]["id"]}");
+                                    Get.to(() => ProdectDetails(
+                                          idUser: data[index]["Manger_Id"],
+                                          idProduct: data[index]["id"],
+                                        ));
+                                  },
+                                  Img: "${data[index]["image"]}",
+                                  name: "${data[index]["name"]}",
+                                  price: "${data[index]["price_buy"]}");
+                            }),
+                      ),
+                    )
+                  ],
+                ),
     );
   }
 }
