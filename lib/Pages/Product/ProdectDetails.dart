@@ -3,19 +3,18 @@ import 'package:dental_supplies/Utils/Api.dart';
 import 'package:dental_supplies/Utils/Check%20internet.dart';
 import 'package:dental_supplies/Utils/ColorsApp.dart';
 import 'package:dental_supplies/Utils/LinksApp.dart';
+import 'package:dental_supplies/Utils/shared_preferences.dart';
 import 'package:dental_supplies/Widget/ButtonShowCart.dart';
 import 'package:dental_supplies/Widget/CardProdect.dart';
 import 'package:dental_supplies/Widget/Loading.dart';
 import 'package:dental_supplies/Widget/Productdetails/ImageProductdetails.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class ProdectDetails extends StatefulWidget {
   final int idProduct;
-  final int idUser;
 
   const ProdectDetails(
-      {super.key, required this.idProduct, required this.idUser});
+      {super.key, required this.idProduct});
 
   @override
   State<ProdectDetails> createState() => _ProdectDetailsState();
@@ -39,17 +38,15 @@ class _ProdectDetailsState extends State<ProdectDetails> {
     dataProduct.clear();
 
     var response = await Api.get("${LinksApp.getProductByIDUrl}/${id}");
+    String idUser = await Cache.GetString("id");
     var resProduct =
-        await Api.get("${LinksApp.getProductByIDUserUrl}/${widget.idUser}");
+        await Api.get("${LinksApp.getProductByIDUserUrl}/${idUser}");
     if (response["status"] == "200") {
       data.addAll(response["data"]);
     }
     if (resProduct["status"] == "200") {
       dataProduct.addAll(resProduct["data"]);
     }
-    print("00000000000000000000000000000000");
-    print(dataProduct);
-    print("00000000000000000000000000000000");
 
     isLoading = false;
     setState(() {});
@@ -195,21 +192,23 @@ class _ProdectDetailsState extends State<ProdectDetails> {
                       children: [
                         dataProduct.isNotEmpty
                             ? CardProdect(
-                            onTap: () {
-                              GetDataForApi(dataProduct[0]["id"]);
-                            },
-                            Img: "${dataProduct[0]["image"]}",
-                            name: "${dataProduct[0]["name"]}",
-                            price: "${dataProduct[0]["price_buy"]}")
+                                onTap: () {
+                                  GetDataForApi(dataProduct[0]["id"]);
+                                },
+                                id: data[0]["id"],
+                                Img: "${dataProduct[0]["image"]}",
+                                name: "${dataProduct[0]["name"]}",
+                                price: "${dataProduct[0]["price_buy"]}")
                             : Container(),
-                        dataProduct.length  > 1
+                        dataProduct.length > 1
                             ? CardProdect(
-                            onTap: () {
-                              GetDataForApi(dataProduct[1]["id"]);
-                            },
-                            Img: "${dataProduct[1]["image"]}",
-                            name: "${dataProduct[1]["name"]}",
-                            price: "${dataProduct[1]["price_buy"]}")
+                                onTap: () {
+                                  GetDataForApi(dataProduct[1]["id"]);
+                                },
+                                id: data[1]["id"],
+                                Img: "${dataProduct[1]["image"]}",
+                                name: "${dataProduct[1]["name"]}",
+                                price: "${dataProduct[1]["price_buy"]}")
                             : Container(),
                       ],
                     ),
@@ -218,21 +217,23 @@ class _ProdectDetailsState extends State<ProdectDetails> {
                       children: [
                         dataProduct.length > 2
                             ? CardProdect(
-                            onTap: () {
-                              GetDataForApi(dataProduct[2]["id"]);
-                            },
-                            Img: "${dataProduct[2]["image"]}",
-                            name: "${dataProduct[2]["name"]}",
-                            price: "${dataProduct[2]["price_buy"]}")
+                                onTap: () {
+                                  GetDataForApi(dataProduct[2]["id"]);
+                                },
+                                id: data[2]["id"],
+                                Img: "${dataProduct[2]["image"]}",
+                                name: "${dataProduct[2]["name"]}",
+                                price: "${dataProduct[2]["price_buy"]}")
                             : Container(),
                         dataProduct.length > 3
                             ? CardProdect(
-                            onTap: () {
-                              GetDataForApi(dataProduct[3]["id"]);
-                            },
-                            Img: "${dataProduct[3]["image"]}",
-                            name: "${dataProduct[3]["name"]}",
-                            price: "${dataProduct[3]["price_buy"]}")
+                                onTap: () {
+                                  GetDataForApi(dataProduct[3]["id"]);
+                                },
+                                id: data[3]["id"],
+                                Img: "${dataProduct[3]["image"]}",
+                                name: "${dataProduct[3]["name"]}",
+                                price: "${dataProduct[3]["price_buy"]}")
                             : Container(),
                       ],
                     ),
@@ -241,21 +242,23 @@ class _ProdectDetailsState extends State<ProdectDetails> {
                       children: [
                         dataProduct.length > 4
                             ? CardProdect(
-                            onTap: () {
-                              GetDataForApi(dataProduct[4]["id"]);
-                            },
-                            Img: "${dataProduct[4]["image"]}",
-                            name: "${dataProduct[4]["name"]}",
-                            price: "${dataProduct[4]["price_buy"]}")
+                                onTap: () {
+                                  GetDataForApi(dataProduct[4]["id"]);
+                                },
+                                id: data[4]["id"],
+                                Img: "${dataProduct[4]["image"]}",
+                                name: "${dataProduct[4]["name"]}",
+                                price: "${dataProduct[4]["price_buy"]}")
                             : Container(),
                         dataProduct.length > 5
                             ? CardProdect(
-                            onTap: () {
-                              GetDataForApi(dataProduct[5]["id"]);
-                            },
-                            Img: "${dataProduct[5]["image"]}",
-                            name: "${dataProduct[5]["name"]}",
-                            price: "${dataProduct[5]["price_buy"]}")
+                                onTap: () {
+                                  GetDataForApi(dataProduct[5]["id"]);
+                                },
+                                id: data[5]["id"],
+                                Img: "${dataProduct[5]["image"]}",
+                                name: "${dataProduct[5]["name"]}",
+                                price: "${dataProduct[5]["price_buy"]}")
                             : Container(),
                       ],
                     ),

@@ -31,7 +31,9 @@ class _AllProudectState extends State<AllProudect> {
 
   @override
   void initState() {
-    super.initState();GetAllDataForApi();}
+    super.initState();
+    GetAllDataForApi();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,9 @@ class _AllProudectState extends State<AllProudect> {
       child: isLoading
           ? const Loading()
           : data.isEmpty
-              ? const EmpityData(txt: "لايوجد بيانات حاليا!",)
+              ? const EmpityData(
+                  txt: "لايوجد بيانات حاليا!",
+                )
               : Column(
                   children: [
                     Expanded(
@@ -57,15 +61,13 @@ class _AllProudectState extends State<AllProudect> {
                             itemBuilder: (context, index) {
                               return CardProdect(
                                   onTap: () {
-                                    print("idUser: ${data[index]["Manger_Id"]}");
-                                    print("idProduct: ${data[index]["id"]}");
                                     Get.to(() => ProdectDetails(
-                                          idUser: data[index]["Manger_Id"],
                                           idProduct: data[index]["id"],
                                         ));
                                   },
                                   Img: "${data[index]["image"]}",
                                   name: "${data[index]["name"]}",
+                                  id: data[index]["id"],
                                   price: "${data[index]["price_buy"]}");
                             }),
                       ),

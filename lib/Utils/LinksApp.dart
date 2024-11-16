@@ -12,4 +12,7 @@ class LinksApp {
   static const  upDataPasswordProfileByID = "$server/Data-profile-password";
   static const  upDataImageProfileByID = "$server/Data-profile-Image";
   static const  searchByText = "$server/Search";
+  static const  getAllDataCartByID = "$server/Cart";
+  static const  deleteItemForCartByID = "$server/Cart";
+  static const  addItemToCart = "$server/Add-To-Card";
 }

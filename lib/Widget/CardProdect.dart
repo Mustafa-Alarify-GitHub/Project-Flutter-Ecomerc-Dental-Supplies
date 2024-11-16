@@ -1,14 +1,31 @@
+import 'package:dental_supplies/Utils/Api.dart';
 import 'package:dental_supplies/Utils/ColorsApp.dart';
+import 'package:dental_supplies/Utils/LinksApp.dart';
+import 'package:dental_supplies/Utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class CardProdect extends StatelessWidget {
+class CardProdect extends StatefulWidget {
+  final int id;
   final String Img;
   final String name;
   final String price;
   final void Function() onTap;
 
-  const CardProdect({super.key, required this.Img, required this.name, required this.price, required this.onTap});
+  const CardProdect(
+      {super.key,
+      required this.id,
+      required this.Img,
+      required this.name,
+      required this.price,
+      required this.onTap});
 
+  @override
+  State<CardProdect> createState() => _CardProdectState();
+}
+
+class _CardProdectState extends State<CardProdect> {
+  bool isOnTap = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +39,7 @@ class CardProdect extends StatelessWidget {
       child: Stack(
         children: [
           InkWell(
-            onTap:onTap ,
+            onTap: widget.onTap,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -33,7 +50,7 @@ class CardProdect extends StatelessWidget {
                     padding: const EdgeInsets.all(15),
                     child: Image.network(
                       width: 300,
-                      Img,
+                      widget.Img,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -44,18 +61,20 @@ class CardProdect extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        name, maxLines: 1,
-                        overflow:TextOverflow.ellipsis,
+                        widget.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontSize: 20, color: ColorsApp.primary),
                       ),
                     ),
                     Expanded(
                       child: Text(
-                        price, maxLines: 1,
-                        overflow:TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(fontSize: 20, color: ColorsApp.gray),
+                        widget.price,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 20, color: ColorsApp.gray),
                       ),
                     ),
                   ],
@@ -66,8 +85,19 @@ class CardProdect extends StatelessWidget {
           Positioned(
               left: 0,
               child: InkWell(
-                onTap: () {
-                  // TODO Add to cart
+                onTap: () async {
+                  String ID = await Cache.GetString("id");
+                  var response = await Api.post(LinksApp.addItemToCart,
+                      {"idUser": "$ID", "product_id": "${this.widget.id}","target":"increment"});
+                  print(response);
+                  if (response["status"] == "200") {
+                    Get.rawSnackbar(
+                      message: "${response["message"]}",
+                      duration: const Duration(seconds: 2),
+                      backgroundColor: ColorsApp.primary,
+                      snackPosition: SnackPosition.TOP,
+                    );
+                  }
                 },
                 child: Container(
                   width: 50,

@@ -276,13 +276,13 @@ class _SearchPageState extends State<SearchPage> {
                 await sql.insert_plus("db", {"name": name});
               }
               Get.to(() => ProdectDetails(
-                idUser: data[index]["Manger_Id"],
                 idProduct: data[index]["id"],
               ));
             },
             Img: data[index]["image"],
             name: data[index]["name"],
             price: data[index]["price_buy"],
+            id:data[index]["id"],
           );
         },
       ),

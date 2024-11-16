@@ -1,11 +1,4 @@
-// : ^2.0.20
-//
-//  SharedPreferences prefs = await SharedPreferences.getInstance();
-//
-//   prefs.setString("n", "B");// save date
-//
-//    name = prefs.getString("n"); //read date
-//
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Cache {

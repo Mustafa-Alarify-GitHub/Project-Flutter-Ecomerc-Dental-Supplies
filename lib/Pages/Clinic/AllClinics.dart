@@ -115,7 +115,7 @@ class _AllClinicsState extends State<AllClinics> {
                 ? Loading()
                 : Column(
                     children: [
-                      ButtonSearch(),
+                      const ButtonSearch(),
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.all(8),
@@ -128,7 +128,7 @@ class _AllClinicsState extends State<AllClinics> {
                                       mainAxisSpacing: 10),
                               itemBuilder: (context, index) {
                                 return Cardclinic(
-                                    id: 1,
+                                    id: data[index]["id"],
                                     imgSrc: "${data[index]["image"]}",
                                     clinic: "${data[index]["name_company"]}",
                                     nameUser: "${data[index]["name"]}");

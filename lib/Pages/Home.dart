@@ -130,7 +130,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   data.isEmpty
-                      ? EmpityData(txt: "لايوجد بيانات حاليا!",)
+                      ? const EmpityData(txt: "لايوجد بيانات حاليا!",)
                       : GridView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           itemCount: data.length,

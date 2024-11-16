@@ -39,7 +39,7 @@ class _ProudectState extends State<Proudect> {
     isLoading = true;
     data.clear();
     var response =
-        await Api.get("${LinksApp.getProductByIDUserUrl}/${widget.id}");
+    await Api.get("${LinksApp.getProductByIDUserUrl}/${widget.id}");
 
     if (response["status"] == "200") {
       data.addAll(response["data"]);
@@ -70,44 +70,45 @@ class _ProudectState extends State<Proudect> {
       ),
       body: !isConnectNet
           ? NoConnect(
-              onTap: () {
-                _checkInternet();
-              },
-            )
+        onTap: () {
+          _checkInternet();
+        },
+      )
           : isLoading
-              ?  Loading()
-              : data.isEmpty
-                  ? EmpityData(txt: "لايوجد بيانات حاليا!",)
-                  : Column(
-                      children: [
-                        const ButtonSearch(),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(15),
-                            child: GridView.builder(
-                                itemCount: data.length,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 10,
-                                        childAspectRatio: .7,
-                                        mainAxisSpacing: 10),
-                                itemBuilder: (context, index) {
-                                  return CardProdect(
-                                      onTap: () {
-                                        Get.to(() => ProdectDetails(
-                                              idProduct: data[index]["id"],
-                                              idUser: widget.id,
-                                            ));
-                                      },
-                                      Img: "${data[index]["image"]}",
-                                      name: "${data[index]["name"]}",
-                                      price: "${data[index]["price_buy"]}");
-                                }),
-                          ),
-                        )
-                      ],
-                    ),
+          ? Loading()
+          : data.isEmpty
+          ? EmpityData(txt: "لايوجد بيانات حاليا!",)
+          : Column(
+        children: [
+          const ButtonSearch(),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(15),
+              child: GridView.builder(
+                  itemCount: data.length,
+                  gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: .7,
+                      mainAxisSpacing: 10),
+                  itemBuilder: (context, index) {
+                    return CardProdect(
+                        onTap: () {
+                          Get.to(() =>
+                              ProdectDetails(
+                                idProduct: data[index]["id"],
+                              ));
+                        },
+                        id: data[index]["id"],
+                        Img: "${data[index]["image"]}",
+                    name: "${data[index]["name"]}",
+                    price: "${data[index]["price_buy"]}");
+                  }),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
