@@ -5,6 +5,7 @@ import 'package:dental_supplies/Pages/MyAccount/MyAccount.dart';
 import 'package:dental_supplies/Pages/Other/NoConnect.dart';
 import 'package:dental_supplies/Pages/Product/AllProduct.dart';
 import 'package:dental_supplies/Pages/Reports/Reports.dart';
+import 'package:dental_supplies/Utils/shared_preferences.dart';
 import 'package:dental_supplies/Widget/ApperHome.dart';
 import 'package:dental_supplies/Widget/ButtonNav.dart';
 import 'package:dental_supplies/Widget/ButtonSearch.dart';
@@ -21,6 +22,9 @@ class _LayoutState extends State<Layout> {
   bool isConnectNet = true;
   bool isLoading = false;
   int indexPage = 0;
+
+  String balanc = "0";
+
   List buttonsNav = [
     {"name": "الرئيسية", "icon": Icons.home_outlined},
     {"name": "طلباتي", "icon": Icons.article_outlined},
@@ -44,12 +48,14 @@ class _LayoutState extends State<Layout> {
   }
 
   Future<void> _checkInternet() async {
+    balanc = await Cache.GetString(Cache.Balanc);
     isConnectNet = await checkInternet();
     setState(() {});
   }
 
   @override
   void initState() {
+    super.initState();
     _checkInternet();
   }
 
@@ -57,21 +63,23 @@ class _LayoutState extends State<Layout> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: isConnectNet && !isLoading ? ButtonCart() : null,
+      floatingActionButton: isConnectNet && !isLoading ? const ButtonCart() : null,
       backgroundColor: ColorsApp.white,
       body: !isConnectNet
-          ? NoConnect(onTap: _checkInternet,)
+          ? NoConnect(
+              onTap: _checkInternet,
+            )
           : isLoading
               ? Loading()
               : Column(
                   children: [
                     const ApperHome(),
                     indexPage == 0 || indexPage == 3
-                        ? ButtonSearch()
+                        ? const ButtonSearch()
                         : Container(),
                     Expanded(child: GetPage()),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       width: double.infinity,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -66,6 +66,7 @@ class _RegisterState extends State<Register> {
       print(response);
       if (response["status"] == "200") {
         Cache.SetString("id", "${response["data"]["id"]}");
+        Cache.SetString(Cache.Balanc, "${response["data"]["stock"]}");
         Get.off(() => Layout());
       } else {
         nameUserError = response["message"];

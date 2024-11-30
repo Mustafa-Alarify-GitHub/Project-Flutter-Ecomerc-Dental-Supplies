@@ -7,9 +7,9 @@ checkInternet() async {
     if (result.isNotEmpty) {
       return true;
     } else {
-      return false;
+      return true;
     }
   } catch (E) {
-    return false;
+    return true;
   }
 }

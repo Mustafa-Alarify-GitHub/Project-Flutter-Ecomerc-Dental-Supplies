@@ -1,10 +1,15 @@
+import 'package:dental_supplies/Utils/Api.dart';
 import 'package:dental_supplies/Utils/ColorsApp.dart';
+import 'package:dental_supplies/Utils/LinksApp.dart';
+import 'package:dental_supplies/Utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ImageProductdetails extends StatelessWidget {
   final String src;
+  final String product_id;
 
-  const ImageProductdetails({super.key, required this.src});
+  const ImageProductdetails({super.key, required this.src, required this.product_id});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +36,18 @@ class ImageProductdetails extends StatelessWidget {
                 left: 10,
                 bottom: 0,
                 child: InkWell(
-                  onTap: () {
-                    // TODO Add to cart
+                  onTap: () async {
+                    String ID = await Cache.GetString("id");
+                    var response = await Api.post(LinksApp.addItemToCart,
+                        {"idUser": "$ID", "product_id": "${this.product_id}","target":"increment"});
+                    if (response["status"] == "200") {
+                      Get.rawSnackbar(
+                        message: "${response["message"]}",
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: ColorsApp.primary,
+                        snackPosition: SnackPosition.TOP,
+                      );
+                    }
                   },
                   child: Container(
                     width: 60,

@@ -17,56 +17,7 @@ class AllClinics extends StatefulWidget {
 class _AllClinicsState extends State<AllClinics> {
   bool isConnectNet = true;
   bool isLoading = true;
-  List data = [
-    {
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeRNT2W7qFwPT6E-d964PtiHIWczi7Wtkh2Q&s",
-      "name_user": "امجد الشهاري",
-      "name_clinic": "hospital",
-    },
-    {
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwCY0uEP3aWt3pMQFPSVuFBpDN56uBke47zA&s",
-      "name_user": "امجد الشهاري",
-      "name_clinic": "hospital",
-    },
-    {
-      "image":
-          "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/new-mixed-health-logo-or-hospital-logo-design-template-c9be22bc1de28c7e522c352bb2defcbd_screen.jpg?ts=1693128618",
-      "name_user": "امجد الشهاري",
-      "name_clinic": "hospital",
-    },
-    {
-      "image":
-          "https://i.pinimg.com/736x/2e/02/bf/2e02bf2de46b5cbddf3cfbc16e83e822.jpg",
-      "name_user": "امجد الشهاري",
-      "name_clinic": "hospital",
-    },
-    {
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeRNT2W7qFwPT6E-d964PtiHIWczi7Wtkh2Q&s",
-      "name_user": "امجد الشهاري",
-      "name_clinic": "hospital",
-    },
-    {
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwCY0uEP3aWt3pMQFPSVuFBpDN56uBke47zA&s",
-      "name_user": "امجد الشهاري",
-      "name_clinic": "hospital",
-    },
-    {
-      "image":
-          "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/new-mixed-health-logo-or-hospital-logo-design-template-c9be22bc1de28c7e522c352bb2defcbd_screen.jpg?ts=1693128618",
-      "name_user": "امجد الشهاري",
-      "name_clinic": "hospital",
-    },
-    {
-      "image":
-          "https://i.pinimg.com/736x/2e/02/bf/2e02bf2de46b5cbddf3cfbc16e83e822.jpg",
-      "name_user": "امجد الشهاري",
-      "name_clinic": "hospital",
-    },
-  ];
+  List data = [];
 
   Future<void> _checkInternet() async {
     isConnectNet = await checkInternet();
@@ -82,7 +33,6 @@ class _AllClinicsState extends State<AllClinics> {
     if (response["status"] == "200") {
       data.addAll(response["data"]);
     }
-    print(response);
     isLoading = false;
     setState(() {});
   }
@@ -129,7 +79,7 @@ class _AllClinicsState extends State<AllClinics> {
                               itemBuilder: (context, index) {
                                 return Cardclinic(
                                     id: data[index]["id"],
-                                    imgSrc: "${data[index]["image"]}",
+                                    imgSrc: "${LinksApp.serverSrcImage}/${data[index]["image"]}",
                                     clinic: "${data[index]["name_company"]}",
                                     nameUser: "${data[index]["name"]}");
                               }),

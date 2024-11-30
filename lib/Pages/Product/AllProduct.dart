@@ -62,10 +62,11 @@ class _AllProudectState extends State<AllProudect> {
                               return CardProdect(
                                   onTap: () {
                                     Get.to(() => ProdectDetails(
+                                      idAdmin: data[index]["Manger_Id"],
                                           idProduct: data[index]["id"],
                                         ));
                                   },
-                                  Img: "${data[index]["image"]}",
+                                  Img: "${LinksApp.serverSrcImage}/${data[index]["image"]}",
                                   name: "${data[index]["name"]}",
                                   id: data[index]["id"],
                                   price: "${data[index]["price_buy"]}");

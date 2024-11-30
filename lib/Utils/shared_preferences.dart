@@ -1,4 +1,4 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Cache {
@@ -20,4 +20,7 @@ class Cache {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("id");
   }
+
+  static const String Balanc = "Balanc";
+  static const String Delivery = "Delivery";
 }

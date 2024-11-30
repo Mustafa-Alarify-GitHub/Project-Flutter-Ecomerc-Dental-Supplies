@@ -99,7 +99,7 @@ class _HomeState extends State<Home> {
                                 ),
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 child: Image.network(
-                                  Heros[index]["image"]!,
+                                  "${LinksApp.serverSrcImage}/${Heros[index]["image"]}",
                                   fit: BoxFit.cover,
                                 ),
                               );
@@ -142,7 +142,7 @@ class _HomeState extends State<Home> {
                                   mainAxisSpacing: 10),
                           itemBuilder: (context, index) => Cardclinic(
                             clinic: "${data[index]["name_company"]}",
-                            imgSrc: "${data[index]["image"]}",
+                            imgSrc: "${LinksApp.serverSrcImage}/${data[index]["image"]}",
                             nameUser: "${data[index]["name"]}",
                             id: data[index]["id"],
                           ),

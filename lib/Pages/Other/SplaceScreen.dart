@@ -1,3 +1,4 @@
+import 'package:dental_supplies/Pages/Delivery/Delivery.dart';
 import 'package:dental_supplies/Pages/Layout.dart';
 import 'package:dental_supplies/Utils/ImagesApp.dart';
 import 'package:dental_supplies/Pages/Auth/Login.dart';
@@ -18,8 +19,11 @@ class _SplaceScreenState extends State<SplaceScreen> {
     await Future.delayed(const Duration(milliseconds: 3000));
 
     String id = await Cache.GetString("id");
-    print(id);
-    if (id.isNotEmpty) {
+    String delivery = await Cache.GetString(Cache.Delivery);
+
+    if (delivery.isNotEmpty) {
+      Get.off(() => Delivery());
+    } else if (id.isNotEmpty) {
       Get.off(() => Layout());
     } else {
       Get.off(() => Login());

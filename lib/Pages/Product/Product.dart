@@ -93,15 +93,20 @@ class _ProudectState extends State<Proudect> {
                       childAspectRatio: .7,
                       mainAxisSpacing: 10),
                   itemBuilder: (context, index) {
+                    print("==================");
+                    print("${LinksApp.serverSrcImage}/${data[index]["image"]}");
+                    print("==================");
                     return CardProdect(
                         onTap: () {
                           Get.to(() =>
                               ProdectDetails(
+                                 idAdmin: data[index]["Manger_Id"],
                                 idProduct: data[index]["id"],
                               ));
                         },
+
                         id: data[index]["id"],
-                        Img: "${data[index]["image"]}",
+                        Img: "${LinksApp.serverSrcImage}/${data[index]["image"]}",
                     name: "${data[index]["name"]}",
                     price: "${data[index]["price_buy"]}");
                   }),

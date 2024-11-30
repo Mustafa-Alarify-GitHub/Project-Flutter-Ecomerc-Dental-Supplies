@@ -48,7 +48,8 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {});
 
     if (txtSearch.text.isNotEmpty) {
-      var response = await Api.get("${LinksApp.searchByText}/${txtSearch.text}");
+      var response =
+          await Api.get("${LinksApp.searchByText}/${txtSearch.text}");
       if (response["status"] == "200") {
         data.addAll(response["data"]);
       }
@@ -108,22 +109,22 @@ class _SearchPageState extends State<SearchPage> {
         body: !isConnectNet
             ? NoConnect(onTap: _checkInternet)
             : Container(
-          width: double.infinity,
-          child: Column(
-            children: [
-              _buildSearchField(),
-              if (!isHiddenSearch) _buildSearchHistoryTitle(),
-              if (!isHiddenSearch && dataSearch.isNotEmpty)
-                _buildSearchHistoryList(),
-              if (!isHiddenSearch && dataSearch.isEmpty)
-                const Text(
-                  "لا توجد نتائج بحث محفوظة",
-                  style: TextStyle(color: ColorsApp.gray),
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    _buildSearchField(),
+                    if (!isHiddenSearch) _buildSearchHistoryTitle(),
+                    if (!isHiddenSearch && dataSearch.isNotEmpty)
+                      _buildSearchHistoryList(),
+                    if (!isHiddenSearch && dataSearch.isEmpty)
+                      const Text(
+                        "لا توجد نتائج بحث محفوظة",
+                        style: TextStyle(color: ColorsApp.gray),
+                      ),
+                    if (isHiddenSearch) _buildSearchResults()
+                  ],
                 ),
-              if (isHiddenSearch) _buildSearchResults()
-            ],
-          ),
-        ),
+              ),
       ),
     );
   }
@@ -142,7 +143,8 @@ class _SearchPageState extends State<SearchPage> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.camera_alt_outlined, size: 40, color: ColorsApp.gray),
+                const Icon(Icons.camera_alt_outlined,
+                    size: 40, color: ColorsApp.gray),
                 _divider(),
                 const Icon(Icons.search, size: 40, color: ColorsApp.gray),
                 const SizedBox(width: 10),
@@ -258,34 +260,36 @@ class _SearchPageState extends State<SearchPage> {
       child: loading
           ? const Center(child: CircularProgressIndicator())
           : data.isEmpty
-          ? const EmpityData(txt: "لم يتم العثور على أي نتائج بحث.")
-          : GridView.builder(
-        itemCount: data.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          childAspectRatio: .7,
-          mainAxisSpacing: 10,
-        ),
-        itemBuilder: (context, index) {
-          return CardProdect(
-            onTap: () async {
-              String name = data[index]["name"];
-              List r = await sql.select("SELECT * FROM db WHERE name == '$name'");
-              if (r.isEmpty) {
-                await sql.insert_plus("db", {"name": name});
-              }
-              Get.to(() => ProdectDetails(
-                idProduct: data[index]["id"],
-              ));
-            },
-            Img: data[index]["image"],
-            name: data[index]["name"],
-            price: data[index]["price_buy"],
-            id:data[index]["id"],
-          );
-        },
-      ),
+              ? const EmpityData(txt: "لم يتم العثور على أي نتائج بحث.")
+              : GridView.builder(
+                  itemCount: data.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: .7,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemBuilder: (context, index) {
+                    return CardProdect(
+                      onTap: () async {
+                        String name = data[index]["name"];
+                        List r = await sql
+                            .select("SELECT * FROM db WHERE name == '$name'");
+                        if (r.isEmpty) {
+                          await sql.insert_plus("db", {"name": name});
+                        }
+                        Get.to(() => ProdectDetails(
+                              idAdmin: data[index]["Manger_Id"],
+                              idProduct: data[index]["id"],
+                            ));
+                      },
+                      Img: data[index]["image"],
+                      name: data[index]["name"],
+                      price: data[index]["price_buy"],
+                      id: data[index]["id"],
+                    );
+                  },
+                ),
     );
   }
 }
